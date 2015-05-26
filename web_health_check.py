@@ -3,25 +3,45 @@ import socket
 from pprint import pformat
 import time
 
+
 def avg_check(url):
-    count = 10
+    count = 5
     total_elapsed = 0
     for idx in xrange(count):
         res = requests.get(url)
         total_elapsed += res.elapsed.total_seconds()
-    print 'elapsed time:', total_elapsed / count
+
+    elapsed_time = total_elapsed / count
+    # print 'elapsed time:', elapsed_time
+
+    return elapsed_time
 
 
 def dns_lookup(host):
     """DNS Lookup
     :param host - hostname
     """
-
+    start = time.time()
     ip = socket.gethostbyname(host)
+    end = time.time()
     print 'ip:', ip
+    print 'lookup_time:', end - start
 
+    start = time.time()
     host_info = socket.getaddrinfo(host, 80)
+    end = time.time()
     print 'host_info:', pformat(host_info)
+    print 'lookup_time:', end - start
+
+
+def check_urls(url_list):
+    # print 'url_list:', url_list
+
+    f = open(url_list)
+    for url in f.readlines():
+        ttfb = avg_check(url)
+        print '%-40s :' % url.strip(), '%f(s)' % ttfb
+
 
 
 
@@ -30,14 +50,11 @@ def main():
     # avg_check(url)
 
     host = 'comic.naver.com'
-    start = time.time()
-    dns_lookup(host)
-    end = time.time()
-    lookup_time = end - start
+    # dns_lookup(host)
 
-    print 'start:', start
-    print 'end:', end
-    print 'lookup_time:', lookup_time
+    url_list = './url_list.txt'
+    check_urls(url_list)
+
 
 if __name__ == '__main__':
     main()
