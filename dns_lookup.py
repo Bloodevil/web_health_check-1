@@ -1,12 +1,13 @@
 import socket
 import time
 
+uri = "www.naver.com"
 start = time.time()
-host = socket.gethostbyname('www.daum.net')
+host = socket.gethostbyname(uri)
 end = time.time()
 diff = end - start
 print 'host:', host
 print str(diff) + '(s)'
 
-info = socket.getaddrinfo("www.daum.net", 80)
+info = socket.getaddrinfo(uri, 80)
 print info
